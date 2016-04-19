@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include head.html %}
+    {% include title.html %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mermaid/0.5.8/mermaid.min.css">
+    <link rel="stylesheet" href="/css/slide.css">
+  </head>
+  <body class="slide">
+    <div id="metadata" class="slide__metadata slide__metadata--hide">
+
+      <h1 class="slide__title">{{ page.title }}</h1>
+      <time class="slide__pubdate">{{ page.date | split:" " | first }}</time>
+
+      {% if page.author %}
+      <span class="slide__author">{{ page.author }}</span>
+      {% endif %}
+
+      {% if page.tags %}
+        <ul class="slide__tags tags">
+          {% assign tags = page.tags | sort %}
+          {% for tag in tags %}
+            {% assign name = tag %}
+            <li class="tags__tag tag">
+              <a class="tag__link" href="javascript:void 0">
+                <span class="tag__text">#{{ name }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <span class="slide__history history">
+        <a class="history__link" href="https://github.com/tsukurite/notes/commits/gh-pages/{{ page.path }}">History</a>
+      </span>
+
+    </div>
+    <script id="markdown" type="text/markdown">{% include_relative {{ page.path | split:"/" | last }} %}</script>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/0.5.8/mermaid.min.js"></script>
+    <script>
+      (function(){
+        'use strict';
+
+        // get markdown text
+        var markdownScript, markdownText, slideshow;
+
+        markdownScript = document.getElementById('markdown');
+        markdownText = markdownScript.innerHTML.replace(/^---\r?\n[\s\S]*?---\r?\n/, '');
+
+        // create slideshow
+        slideshow = remark.create({
+          source: markdownText,
+          navigation: {
+            scroll: false
+          }
+        });
+
+        // export slideshow instance
+        window.slideshow = slideshow;
+
+        //------------------------------------------------
+
+        // animate metadata area
+        var metadata = document.getElementById('metadata'),
+            modifierClassName = 'slide__metadata--hide';
+
+        function onShowSlide(slide) {
+          var index = (slide.getSlideIndex) ?
+            slide.getSlideIndex() : slide.getCurrentSlideIndex();
+
+          if (index === 0) {
+            // show metadata if first page
+            metadata.classList.remove(modifierClassName);
+          } else {
+            // hide metadata
+            metadata.classList.add(modifierClassName);
+          }
+        }
+
+        slideshow.on('showSlide', onShowSlide);
+
+        onShowSlide(slideshow);
+
+        //------------------------------------------------
+
+        // disable auto initialize
+        mermaid.initialize({
+          startOnLoad: false
+        });
+
+        function onAfterShowSlide(slide) {
+          // generate mermaid graph
+          mermaid.init(void 0, '.remark-visible .mermaid');
+        }
+
+        slideshow.on('afterShowSlide', onAfterShowSlide);
+
+        onAfterShowSlide(slideshow);
+      }());
+    </script>
+  </body>
+</html>

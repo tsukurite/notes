@@ -1,0 +1,51 @@
+name:
+  notes
+
+url:
+  https://tsukurite.github.io/notes
+
+baseurl:
+  /notes
+
+permalink:
+  /note/:title/index.html
+
+timezone:
+  Asia/Tokyo
+
+markdown:
+  kramdown
+
+highlighter:
+  rouge
+
+kramdown:
+  input: GFM
+
+sass:
+  style: compressed
+
+gems:
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-github-metadata
+  - jekyll-paginate
+  - jekyll-redirect-from
+  - jekyll-sitemap
+  - jemoji
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - Rakefile
+  - vendor
+
+defaults:
+
+  - scope:
+      path: ''
+      type: 'posts'
+    values:
+      layout: 'note'

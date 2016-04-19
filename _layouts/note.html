@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include head.html %}
+    {% include title.html %}
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/note.css">
+  </head>
+  <body class="note">
+    {% include header.html %}
+
+    <main class="note main" role="main">
+      <div class="note__inner">
+
+        <h1 class="note__title">{{ page.title }}</h1>
+        <time class="note__pubdate">{{ page.date | split:" " | first }}</time>
+
+        {% if page.author %}
+          <span class="note__author">{{ page.author }}</span>
+        {% endif %}
+
+        {% if page.tags %}
+          <ul class="note__tags tags">
+            {% assign tags = page.tags | sort %}
+            {% for tag in tags %}
+              {% assign name = tag %}
+              <li class="tags__tag tag">
+                <a class="tag__link" href="javascript:void 0">
+                  <span class="tag__text">#{{ name }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <span class="note__history history">
+          <a class="history__link" href="https://github.com/tsukurite/notes/commits/gh-pages/{{ page.path }}">History</a>
+        </span>
+
+        <section class="note__content">
+          {{ content }}
+        </section>
+
+      </div>
+    </main>
+
+    {% include footer.html %}
+  </body>
+</html>

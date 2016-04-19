@@ -1,0 +1,7 @@
+{% if page.title %}
+  <title>{{ page.title | escape }} - {{ site.name | escape }}</title>
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+{% else %}
+  <title>{{ site.name | escape }}</title>
+  <link rel="canonical" href="{{ site.url }}">
+{% endif %}

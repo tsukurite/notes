@@ -1,0 +1,58 @@
+@charset "utf-8";
+
+@import "config";
+
+@mixin narrow-width {
+	@media only screen and (max-width: 800px - 1px) {
+		@content;
+	}
+}
+
+body {
+	font-family:
+		"ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro",
+		"メイリオ", Meiryo,
+		sans-serif;
+	margin: 0;
+}
+
+main {
+	display: block;
+}
+
+.header {
+	background-color: #efefef;
+	border-bottom: 1px solid #cccccc;
+	padding: 0.6rem 1rem;
+	margin-bottom: 1rem;
+
+	.header__inner {
+		margin: 0 auto;
+		width: 800px;
+
+		@include narrow-width {
+			margin: 0;
+			width: auto;
+		}
+
+		.header__title.title {
+			.title__link {
+				&:link, &:visited {
+					color: #000000;
+					text-decoration: none;
+				}
+			}
+
+			.title__text {
+				background-image: url(#{$baseurl}/image/logo.svg);
+				background-repeat: no-repeat;
+				background-size: contain;
+				display: inline;
+				font-family: Verdana, sans-serif;
+				font-weight: lighter;
+				margin: 0;
+				padding-left: 48px;
+			}
+		}
+	}
+}

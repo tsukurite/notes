@@ -1,0 +1,58 @@
+---
+---
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include head.html %}
+    {% include title.html %}
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/index.css">
+  </head>
+  <body class="index">
+    {% include header.html %}
+
+    <main class="index main" role="main">
+      <div class="index__inner">
+
+        <nav>
+          <ul class="index__articles articles">
+            {% for post in site.posts %}
+              <li class="articles__article article">
+                <a class="article__link" href="{{ post.url | remove_first:'/' | remove_first:'index.html' }}">
+                  <h1 class="article__title">{{ post.title }}</h1>
+                  <time class="article__pubdate">{{ post.date | split:" " | first }}</time>
+                  {% if post.author %}
+                    <span class="article__author">{{ post.author }}</span>
+                  {% endif %}
+                  <ul class="article__tags tags">
+                    {% assign tags = post.tags | sort %}
+                    {% for tag in tags %}
+                      <li class="tags__tag tag">
+                        <span class="tag__text">#{{ tag }}</span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+
+        <ul class="index__tags tags">
+          {% assign tags = site.tags | sort %}
+          {% for tag in tags %}
+            {% assign name = tag[0] %}
+            {% assign post = tag[1] %}
+            <li class="tags__tag tag">
+              <a class="tag__link" href="javascript:void 0">
+                <span class="tag__text">#{{ name }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+
+      </div>
+    </main>
+
+    {% include footer.html %}
+  </body>
+</html>
