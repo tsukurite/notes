@@ -11,7 +11,7 @@ TernはJavaScriptで記述されていて、node.jsで動作するのでそれ�
 
 ---
 
-`npm`からTernをインストールする。
+npmからTernをインストールする。
 
 ```sh
 $ npm install -g tern
@@ -19,7 +19,7 @@ $ npm install -g tern
 
 ---
 
-`.vimrc`に以下のように記述してTern for Vimを読み込む。`NeoBundle`を使用しているので`NeoBundleLazy`で読み込ませる。
+`.vimrc`に以下のように記述してTern for Vimを読み込む。NeoBundleを使用しているのでNeoBundleLazyで読み込ませる。
 
 ```vim
 NeoBundleLazy 'gh:marijnh/tern_for_vim.git', {
