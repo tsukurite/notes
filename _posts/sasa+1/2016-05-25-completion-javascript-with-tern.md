@@ -27,6 +27,7 @@ NeoBundleLazy 'gh:marijnh/tern_for_vim.git', {
       \ 'autoload' : {
       \   'filetypes' : 'javascript',
       \ },
+      \ 'build' : 'npm install',
       \ }
 ```
 
@@ -38,13 +39,6 @@ set completeopt-=preview
 
 ---
 
-使用するときはVimを起動する前にTernを起動する。
-
-```sh
-$ tern
-Listening on port 50633
-```
-
-Ternが起動したあとVimでJavaScriptのコードを書けば補完される。
+これでJavaScriptのコードを編集するときに入力補完がされるようになる。
 
 [Tern Reference Manual](http://ternjs.net/doc/manual.html)を読むと`.tern-project`というファイルを作成することで補完に関する動作を設定できるようだ。
