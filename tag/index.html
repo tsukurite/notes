@@ -1,0 +1,240 @@
+---
+---
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include head.html %}
+    {% include title.html %}
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/tag.css">
+  </head>
+  <body class="tag">
+    {% include header.html %}
+
+    <main class="tag main" role="main">
+      <div class="tag__inner">
+
+        <h1 class="tag__title">タグを含むページの一覧</h1>
+
+        <dl class="tag__tag-state tag-state">
+          <dt class="tag-state__title">指定されているタグ</dt>
+          <dd class="tag-state__list">
+            <ul id="selected-tags" class="tag-state__tags tags"></ul>
+          </dd>
+        </dl>
+
+        <dl class="tag__tag-state tag-state">
+          <dt class="tag-state__title">選択できるタグ</dt>
+          <dd class="tag-state__list">
+            <ul id="unselect-tags" class="tag-state__tags tags"></ul>
+          </dd>
+        </dl>
+
+        <nav>
+          <ul id="articles" class="tag__articles articles"></ul>
+        </nav>
+
+      </div>
+    </main>
+
+    {% include footer.html %}
+
+    <script id="html-find-tags" type="text/html">
+      <li class="tags__tag tag">
+        <a class="tag__link" href="<%- obj.uri %>">
+          <span class="tag__text">#<%- obj.name %></span><!--
+        --></a>
+      </li>
+    </script>
+
+    <script id="html-list-item" type="text/html">
+      <li class="articles__article article">
+        <a class="article__link" href="<%- obj.uri %>">
+          <h1 class="article__title"><%- obj.title %></h1>
+          <time class="article__pubdate"><%- obj.date %></time>
+          <% if (obj.author) { %>
+          <span class="article__author"><%- obj.author %></span>
+          <% } %>
+          <ul class="article__tags tags">
+            <% _.forEach(obj.tags, function(tag) { %>
+            <li class="tags__tag tag">
+              <span class="tag__text">#<%- tag %></span>
+            </li>
+            <% }); %>
+          </ul>
+        </a>
+      </li>
+    </script>
+
+    <script id="json-site-tags" type="application/json">
+      {
+        "tags": [{% assign tags = site.tags | sort %}
+          {% for tag in tags %}{% assign name = tag[0] %}
+          "{{ name }}"{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }
+    </script>
+
+    <script id="json-post-data" type="application/json">
+      {
+        "articles": [
+          {% for post in site.posts %}
+          {
+            "uri": "{{ site.baseurl }}{{ post.url | remove_first:'index.html' }}",
+            "title": "{{ post.title | escape }}",
+            "date": "{{ post.date | split:' ' | first }}",
+            "author": "{{ post.author }}",
+            "tags": [{% assign tags = post.tags | sort %}
+              {% for tag in tags %}
+              "{{ tag }}"{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            ]
+          }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js"></script>
+    <script>
+      (function(){
+        'use strict';
+
+        //----------------------------------------------------------------------
+
+        /**
+         * parse query string
+         *
+         * @param {String} text
+         * @return {String[]}
+         */
+        function parseQueryString(text) {
+          var result = {},
+              params;
+
+          if (/^\?/.test(text)) {
+            params = text.slice(1).split('&');
+          } else {
+            params = text.split('&');
+          }
+
+          _.forEach(params, function(string) {
+            var key, value;
+
+            /=/.exec(string);
+
+            key = RegExp.leftContext;
+            value = RegExp.rightContext;
+
+            result[key] || (result[key] = []);
+            result[key].push(
+              decodeURIComponent(value) || null
+            );
+          });
+
+          return result;
+        }
+
+        var queries = parseQueryString(location.search),
+            queryTags = _.map(queries.q, _.toLower);
+
+        //----------------------------------------------------------------------
+
+        (function(){
+          var compile, data;
+
+          compile = _.template(
+            document.getElementById('html-find-tags').innerHTML
+          );
+          data = JSON.parse(
+            document.getElementById('json-site-tags').innerHTML
+          );
+
+          var selectedTags, unselectTags;
+
+          selectedTags = _.pullAll(data.tags, queryTags);
+          unselectTags = _.pullAll(queryTags, data.tags);
+
+          /**
+           * return querystring
+           *
+           * @param {String[]}
+           * @param {String}
+           * @return {String}
+           */
+          function removeTag(sourceTags, removeTag) {
+            var result = _.pull(_.clone(sourceTags), removeTag);
+
+            return (result.length > 0) ? '?q=' + result.join('&q=') : '';
+          }
+
+          /**
+           * return querystring
+           *
+           * @param {String[]}
+           * @param {String}
+           * @return {String}
+           */
+          function appendTag(sourceTags, appendTag) {
+            var result = _.clone(sourceTags).concat([appendTag]);
+
+            return (result.length > 0) ? '?q=' + result.join('&q=') : '';
+          }
+
+          var selectedTagsElement = document.getElementById('selected-tags'),
+              unselectTagsElement = document.getElementById('unselect-tags');
+
+          selectedTagsElement.innerHTML =
+            _(unselectTags)
+              .map(function(tag) {
+                return {
+                  name: tag,
+                  uri: location.pathname + removeTag(queryTags, tag)
+                };
+              })
+              .map(compile)
+              .value()
+              .join('');
+
+          unselectTagsElement.innerHTML =
+            _(selectedTags)
+              .map(function(tag) {
+                return {
+                  name: tag,
+                  uri: location.pathname + appendTag(queryTags, tag)
+                };
+              })
+              .map(compile)
+              .value()
+              .join('');
+        }());
+
+        //----------------------------------------------------------------------
+
+        (function(){
+          var compile, data, articles;
+
+          compile = _.template(
+            document.getElementById('html-list-item').innerHTML
+          );
+          data = JSON.parse(
+            document.getElementById('json-post-data').innerHTML
+          );
+
+          articles = _.filter(data.articles, function(post) {
+            var iteratee = _.partial(_.includes, post.tags),
+                includes = _.map(queryTags, iteratee);
+
+            return _.every(includes, function(value) {
+              return (value === true);
+            });
+          });
+
+          var articlesElement = document.getElementById('articles');
+
+          articlesElement.innerHTML = _.map(articles, compile).join('');
+        }());
+      }());
+    </script>
+  </body>
+</html>
