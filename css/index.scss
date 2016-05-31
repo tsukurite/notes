@@ -33,11 +33,13 @@
 				}
 			}
 			&:first-child .article__link {
-				border-radius: 5px 5px 0 0;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
 			}
 			&:last-child .article__link {
 				border-bottom: 1px solid #cccccc;
-				border-radius: 0 0 5px 5px;
+				border-bottom-left-radius: 5px;
+				border-bottom-right-radius: 5px;
 			}
 
 			.article__title {
