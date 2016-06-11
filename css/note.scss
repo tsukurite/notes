@@ -55,11 +55,15 @@
 			}
 		}
 
+		.note__blob.blob,
+		.note__blame.blame,
 		.note__history.history {
 			font-family: Verdana, sans-serif;
 			font-size: 80%;
 			font-weight: bolder;
 
+			.blob__link,
+			.blame__link,
 			.history__link {
 				&:link, &:visited {
 					color: #999999;
