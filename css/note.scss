@@ -1,7 +1,7 @@
 ---
 ---
 @import "common";
-@import "autumn";
+@import "highlight";
 
 .main.note {
 
@@ -168,7 +168,7 @@
 						Monaco,
 						monospace;
 
-						@include autumn;
+						@include highlight;
 				}
 			}
 
