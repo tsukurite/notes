@@ -1,6 +1,6 @@
 ---
 author: sasa+1
-tags: youtube
+tags: api youtube
 title: YouTube IFrame Player APIを埋め込まれたiframeに使う
 ---
 [iframe 組み込みの YouTube Player API リファレンス](https://developers.google.com/youtube/iframe_api_reference)には、divタグにidを付与してそのidとパラメータをAPIに渡すことでプレーヤーを生成する、という風にサンプルコードが書いてあるので、この方法で使うことが多いと思う。
