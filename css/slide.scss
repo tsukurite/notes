@@ -78,7 +78,11 @@ body {
 			}
 		}
 
+		.slide__blob.blob,
+		.slide__blame.blame,
 		.slide__history.history {
+			.blob__link,
+			.blame__link,
 			.history__link {
 				font-size: 80%;
 
