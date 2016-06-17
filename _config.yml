@@ -13,6 +13,9 @@ permalink:
 timezone:
   Asia/Tokyo
 
+future:
+  true
+
 markdown:
   kramdown
 
