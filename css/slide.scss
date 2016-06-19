@@ -124,6 +124,17 @@ body {
 			margin: 0;
 		}
 
+		blockquote p {
+			&::before {
+				color: #999999;
+				content: "\201C";
+			}
+			&::after {
+				color: #999999;
+				content: "\201D";
+			}
+		}
+
 		table {
 			border-collapse: collapse;
 			margin: 0 auto;
