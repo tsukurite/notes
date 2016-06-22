@@ -128,10 +128,14 @@ body {
 			&::before {
 				color: #999999;
 				content: "\201C";
+				font-family: Helvetica, Arial, sans-serif;
+				margin-right: 5px;
 			}
 			&::after {
 				color: #999999;
 				content: "\201D";
+				font-family: Helvetica, Arial, sans-serif;
+				margin-right: 5px;
 			}
 		}
 
