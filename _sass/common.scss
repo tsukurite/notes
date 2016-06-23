@@ -8,6 +8,12 @@
 	}
 }
 
+.clearfix::after {
+	clear: both;
+	content: "";
+	display: block;
+}
+
 body {
 	font-family:
 		"ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro",
@@ -36,6 +42,8 @@ main {
 		}
 
 		.header__title.title {
+			float: left;
+
 			.title__link {
 				&:link, &:visited {
 					color: #000000;
@@ -52,6 +60,33 @@ main {
 				font-weight: lighter;
 				margin: 0;
 				padding-left: 48px;
+			}
+		}
+
+		.header__links.links {
+			float: right;
+
+			.links__list.list {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+
+				.list__item {
+					display: inline;
+					margin-right: 15px;
+
+					&:last-child {
+						margin-right: 0;
+					}
+
+					.mega-octicon {
+						font-size: 39px;
+					}
+
+					a:link, a:visited {
+						color: #000000;
+					}
+				}
 			}
 		}
 	}

@@ -1,10 +1,21 @@
 <header class="header">
-  <div class="header__inner">
+  <div class="header__inner clearfix">
 
     <div class="header__title title">
       <a class="title__link" href="{{ site.baseurl }}/">
         <h1 class="title__text">{{ site.name }}</h1>
       </a>
+    </div>
+
+    <div class="header__links links">
+      <ul class="links__list list">
+        <li class="list__item">
+          <a href="{{ site.baseurl }}/feed.xml"><span class="mega-octicon octicon-rss"></span></a>
+        </li>
+        <li class="list__item">
+          <a href="https://github.com/tsukurite/notes"><span class="mega-octicon octicon-mark-github"></span></a>
+        </li>
+      </ul>
     </div>
 
   </div>
