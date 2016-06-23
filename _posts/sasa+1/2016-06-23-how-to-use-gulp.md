@@ -460,6 +460,7 @@ $ tree ./image
 タスクを実行してCSS Spriteを生成する
 
 ```console
+$ gulp sprite
 [00:00:00] Using gulpfile /path/to/gulpfile.js
 [00:00:00] Starting 'sprite'...
 [00:00:00] Finished 'sprite' after 338 ms
@@ -476,6 +477,162 @@ $ tree ./sprite
 ./sprite
 ├── sprite.css
 └── sprite.png
+```
+
+---
+
+## CSS Spriteを作る
+
+ScssからCSS Spriteを使いたいのでScssで出力するよう修正する
+
+```diff
+-  return gulp.src('./image/**/*.png')
++  var spriteData = gulp.src('./image/**/*.png')
+     .pipe(spritesmith({
+       imgName: 'sprite.png',
+-      cssName: 'sprite.css',
++      cssName: '_sprite.scss',
++      imgPath: '../sprite/sprite.png',
++      cssFormat: 'scss',
+     }))
+-    .pipe(gulp.dest('./sprite'));
++    spriteData.img.pipe(gulp.dest('./sprite'));
++    spriteData.css.pipe(gulp.dest('./sass'));
+```
+
+---
+
+## CSS Spriteを作る
+
+`sass/index.scss`に以下のコードを書く
+
+```scss
+@import "_sprite";
+
+div {
+  @include sprite($icon1);
+}
+```
+
+---
+
+## CSS Spriteを作る
+
+タスクを実行してCSS Spriteを生成し、Sassをコンパイルする
+
+```console
+$ gulp sprite sass
+[00:00:00] Using gulpfile /path/to/gulpfile.js
+[00:00:00] Starting 'sprite'...
+[00:00:00] Finished 'sprite' after 8.48 ms
+[00:00:00] Starting 'sass'...
+[00:00:00] Finished 'sass' after 341 ms
+```
+
+---
+
+## CSS Spriteを作る
+
+`css/index.css`を見るとCSS Spriteが展開されている
+
+```css
+div {
+  background-image: url(../sprite/sprite.png);
+  background-position: 0px 0px;
+  width: 128px;
+  height: 128px;
+}
+```
+
+---
+<!-- class: middle, center -->
+
+# タスクの動作を切り替える
+
+---
+
+## タスクの動作を切り替える
+
+gulp-utilモジュールをインストールする
+
+```console
+$ npm install gulp-util
+```
+
+---
+
+## タスクの動作を切り替える
+
+gulp-utilを使用するため以下のようにコードを修正する
+
+```diff
++var util = require('gulp-util');
+
+ gulp.task('hello', function() {
++  if (util.env.development) {
++    console.log('development flag');
++  }
++
+   console.log('Hello!');
+ });
+```
+
+---
+
+## タスクの動作を切り替える
+
+タスクを実行する際にオプションを付けると出力が変わる
+
+```console
+$ gulp hello
+[00:00:00] Using gulpfile /path/to/gulpfile.js
+[00:00:00] Starting 'hello'...
+Hello!
+[00:00:00] Finished 'hello' after 128 μs
+$ gulp hello --development
+[00:00:00] Using gulpfile /path/to/gulpfile.js
+[00:00:00] Starting 'hello'...
+development flag
+Hello!
+[00:00:00] Finished 'hello' after 143 μs
+```
+
+---
+<!-- class: middle, center -->
+
+# ファイルの変更を監視する
+
+---
+
+## ファイルの変更を監視する
+
+Scssのファイルが変更されたら
+
+sassのタスクを実行するタスクを追記する
+
+```js
+gulp.task('watch', function() {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+});
+```
+
+---
+
+## ファイルの変更を監視する
+
+watchのタスクを実行し、Scssのファイルを変更して保存すると
+
+sassのタスクが実行される
+
+```console
+$ gulp watch
+[10:27:38] Using gulpfile /path/to/gulpfile.js
+[10:27:38] Starting 'watch'...
+[10:27:38] Finished 'watch' after 9.76 ms
+[10:27:43] Starting 'sass'...
+[10:27:43] Finished 'sass' after 32 ms
+[10:27:47] Starting 'sass'...
+[10:27:47] Finished 'sass' after 9.17 ms
 ```
 
 ---
